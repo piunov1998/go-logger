@@ -32,7 +32,7 @@ func process() (int, error) {
 }
 ```
 
-![](example/advanced.png)
+![](example/basic.png)
 
 ### advanced
 
