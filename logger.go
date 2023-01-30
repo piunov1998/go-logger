@@ -28,22 +28,17 @@ var levels = map[string]uint32{
 type Config struct {
 	Colors   bool   `yaml:"colors"`
 	LogLevel string `yaml:"log_level"`
-	Modules  []struct {
-		Name  string `yaml:"name"`
-		Level string `yaml:"level"`
-	} `yaml:"modules"`
 }
 
-func BasicConfig() Config {
-	return Config{
-		Colors:   false,
-		LogLevel: "info",
-		Modules:  nil,
-	}
+var BasicConfig = Config{
+	Colors:   true,
+	LogLevel: "info",
 }
 
 type Logger interface {
 	SetLevel(level uint32)
+	Log(level uint32, msg string)
+	Logf(level uint32, format string, params ...any)
 	Debug(msg string)
 	Info(msg string)
 	Warn(msg string)
@@ -56,7 +51,7 @@ type Logger interface {
 	Fatalf(format string, params ...any)
 }
 
-func New(issuer any, config Config) Logger {
+func New(issuer any, config *Config) Logger {
 	var name string
 
 	switch issuer.(type) {
@@ -68,31 +63,21 @@ func New(issuer any, config Config) Logger {
 	flags := log.Ldate + log.Ltime + log.Lmsgprefix
 	innerLogger := log.New(os.Stdout, fmt.Sprintf("[%s] ", name), flags)
 
-	var (
-		level       uint32
-		moduleLevel string
-	)
-
-	for _, module := range config.Modules {
-		if name == module.Name {
-			moduleLevel = module.Level
-		}
+	if BasicConfig.LogLevel == "" {
+		BasicConfig.LogLevel = "info"
 	}
-	if moduleLevel != "" {
-		var ok bool
-		level, ok = levels[moduleLevel]
-		if !ok {
-			panic("неверный уровень логов")
-		}
-	} else {
-		var ok bool
-		if config.LogLevel == "" {
-			config.LogLevel = "info"
-		}
-		level, ok = levels[config.LogLevel]
-		if !ok {
-			panic("неверный уровень логов")
-		}
+
+	if config == nil {
+		config = &BasicConfig
+	}
+
+	if config.LogLevel == "" {
+		config.LogLevel = BasicConfig.LogLevel
+	}
+
+	level, ok := levels[config.LogLevel]
+	if !ok {
+		panic("неверный уровень логов")
 	}
 
 	if config.Colors {

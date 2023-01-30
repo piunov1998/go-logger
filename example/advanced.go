@@ -4,13 +4,18 @@ import (
 	logger "github.com/piunov1998/go-logger"
 )
 
+func init() {
+	logger.BasicConfig.Colors = true
+	logger.BasicConfig.LogLevel = "debug"
+}
+
 type AwesomeService struct {
 	logger logger.Logger
 }
 
 func New() AwesomeService {
 	service := AwesomeService{}
-	service.logger = logger.New(service, logger.Config{Colors: true, LogLevel: "debug"})
+	service.logger = logger.New(service, nil)
 	return service
 }
 
@@ -21,7 +26,7 @@ func (a AwesomeService) Do() (int, error) {
 }
 
 func main() {
-	log := logger.New("main", logger.Config{Colors: true, LogLevel: "info"})
+	log := logger.New("main", &logger.Config{Colors: true, LogLevel: "info"})
 	service := New()
 	if result, err := service.Do(); err != nil {
 		log.Fatalf("error during workflow -> %s", err)

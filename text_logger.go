@@ -23,7 +23,7 @@ func (l *TextLogger) SetLevel(level uint32) {
 	l.level = level
 }
 
-func (l *TextLogger) log(msg string, level uint32) {
+func (l *TextLogger) Log(level uint32, msg string) {
 	if level < l.level {
 		return
 	}
@@ -33,7 +33,7 @@ func (l *TextLogger) log(msg string, level uint32) {
 	l.logger.SetPrefix(prefix)
 }
 
-func (l *TextLogger) logf(format string, level uint32, params []any) {
+func (l *TextLogger) Logf(level uint32, format string, params ...any) {
 	if level < l.level {
 		return
 	}
@@ -44,43 +44,43 @@ func (l *TextLogger) logf(format string, level uint32, params []any) {
 }
 
 func (l *TextLogger) Debug(msg string) {
-	l.log(msg, DebugLevel)
+	l.Log(DebugLevel, msg)
 }
 
 func (l *TextLogger) Info(msg string) {
-	l.log(msg, InfoLevel)
+	l.Log(InfoLevel, msg)
 }
 
 func (l *TextLogger) Warn(msg string) {
-	l.log(msg, WarningLevel)
+	l.Log(WarningLevel, msg)
 }
 
 func (l *TextLogger) Error(msg string) {
-	l.log(msg, ErrorLevel)
+	l.Log(ErrorLevel, msg)
 }
 
 func (l *TextLogger) Fatal(msg string) {
-	l.log(msg, FatalError)
+	l.Log(FatalError, msg)
 	os.Exit(1)
 }
 
 func (l *TextLogger) Debugf(format string, params ...any) {
-	l.logf(format, DebugLevel, params)
+	l.Logf(DebugLevel, format, params...)
 }
 
 func (l *TextLogger) Infof(format string, params ...any) {
-	l.logf(format, InfoLevel, params)
+	l.Logf(InfoLevel, format, params...)
 }
 
 func (l *TextLogger) Warnf(format string, params ...any) {
-	l.logf(format, WarningLevel, params)
+	l.Logf(WarningLevel, format, params...)
 }
 
 func (l *TextLogger) Errorf(format string, params ...any) {
-	l.logf(format, ErrorLevel, params)
+	l.Logf(ErrorLevel, format, params...)
 }
 
 func (l *TextLogger) Fatalf(format string, params ...any) {
-	l.logf(format, FatalError, params)
+	l.Logf(FatalError, format, params...)
 	os.Exit(1)
 }

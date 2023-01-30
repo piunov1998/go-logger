@@ -23,7 +23,7 @@ func (l *ColorLogger) SetLevel(level uint32) {
 	l.level = level
 }
 
-func (l *ColorLogger) log(msg string, level uint32) {
+func (l *ColorLogger) Log(level uint32, msg string) {
 	if level < l.level {
 		return
 	}
@@ -33,7 +33,7 @@ func (l *ColorLogger) log(msg string, level uint32) {
 	l.logger.SetPrefix(prefix)
 }
 
-func (l *ColorLogger) logf(format string, level uint32, params []any) {
+func (l *ColorLogger) Logf(level uint32, format string, params ...any) {
 	if level < l.level {
 		return
 	}
@@ -44,43 +44,43 @@ func (l *ColorLogger) logf(format string, level uint32, params []any) {
 }
 
 func (l *ColorLogger) Debug(msg string) {
-	l.log(msg, DebugLevel)
+	l.Log(DebugLevel, msg)
 }
 
 func (l *ColorLogger) Info(msg string) {
-	l.log(msg, InfoLevel)
+	l.Log(InfoLevel, msg)
 }
 
 func (l *ColorLogger) Warn(msg string) {
-	l.log(msg, WarningLevel)
+	l.Log(WarningLevel, msg)
 }
 
 func (l *ColorLogger) Error(msg string) {
-	l.log(msg, ErrorLevel)
+	l.Log(ErrorLevel, msg)
 }
 
 func (l *ColorLogger) Fatal(msg string) {
-	l.log(msg, FatalError)
+	l.Log(FatalError, msg)
 	os.Exit(1)
 }
 
 func (l *ColorLogger) Debugf(format string, params ...any) {
-	l.logf(format, DebugLevel, params)
+	l.Logf(DebugLevel, format, params...)
 }
 
 func (l *ColorLogger) Infof(format string, params ...any) {
-	l.logf(format, InfoLevel, params)
+	l.Logf(InfoLevel, format, params...)
 }
 
 func (l *ColorLogger) Warnf(format string, params ...any) {
-	l.logf(format, WarningLevel, params)
+	l.Logf(WarningLevel, format, params...)
 }
 
 func (l *ColorLogger) Errorf(format string, params ...any) {
-	l.logf(format, ErrorLevel, params)
+	l.Logf(ErrorLevel, format, params...)
 }
 
 func (l *ColorLogger) Fatalf(format string, params ...any) {
-	l.logf(format, FatalError, params)
+	l.Logf(FatalError, format, params...)
 	os.Exit(1)
 }
